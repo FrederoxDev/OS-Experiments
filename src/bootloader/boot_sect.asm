@@ -12,10 +12,10 @@ call switch_to_pm ; Never Returns
 jmp $
 
 ; includes
-%include "src/print_string.asm"
-%include "src/gdt.asm"
-%include "src/switch_to_pm.asm"
-%include "src/pm_print_string.asm"
+%include "src/bootloader/print_string.asm"
+%include "src/bootloader/gdt.asm"
+%include "src/bootloader/switch_to_pm.asm"
+%include "src/bootloader/pm_print_string.asm"
 
 [bits 32]
 BEGIN_PM:
