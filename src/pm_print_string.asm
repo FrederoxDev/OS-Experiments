@@ -24,9 +24,9 @@ print_string_pm_loop:
     add ebx, 1                  ; Move to the next character in the string
     add edx, 2                  ; Move to the next character cell in video memory
 
-    jmp print_string_pm_done
+    jmp print_string_pm_loop
 
 
-print_string_pm_done
+print_string_pm_done:
     popa
     ret
