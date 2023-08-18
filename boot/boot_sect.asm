@@ -28,10 +28,10 @@ load_kernel:
     mov bx, MSG_LOAD_KERNEL
     call print_string
 
-    mov bx, KERNEL_OFFSET       ; Set -up parameters for our disk_load routine , so
-    mov dh, 15                  ; that we load the first 15 sectors ( excluding
-    mov dl, [ BOOT_DRIVE ]      ; the boot sector ) from the boot disk ( i.e. our
-    call disk_load              ; kernel code ) to address KERNEL_OFFSET
+    mov bx, KERNEL_OFFSET       
+    mov dh, 15                  
+    mov dl, [ BOOT_DRIVE ]     
+    call disk_load         
 
     ret 
 
@@ -40,16 +40,13 @@ BEGIN_PM:
     mov ebx, MSG_PROT_MODE
     call print_string_pm
 
-    call KERNEL_OFFSET  ; Now jump to the address of our loaded
-                        ; kernel code , assume the brace position ,
-                        ; and cross your fingers. Here we go!
-
+    call KERNEL_OFFSET ; jump to the kernel
     jmp $
 
 ; Global variables
 BOOT_DRIVE db 0
 MSG_REAL_MODE db "Started in 16 - bit Real Mode", ENDL, 0
-MSG_PROT_MODE db "Successfully landed in 32 - bit Protected Mode", 0
+MSG_PROT_MODE db "Entered 32 - bit Protected Mode", 0
 MSG_LOAD_KERNEL db "Loading Kernel into memory.", ENDL, 0
 
 

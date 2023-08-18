@@ -108,7 +108,7 @@ void clear_screen() {
 }
 
 /*
-Prints text to terminal
+Prints text to terminal from the cursor position
 */
 void print(char text[]) 
 {
