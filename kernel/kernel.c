@@ -1,10 +1,7 @@
-void some_function() {
-    return;
-}
+#include "../driver/screen.c"
 
 void main() {
-    char* video_memory = (char*)0xb8000;
-    *video_memory = 'Z';
-
-    some_function();
+    clear_screen();
+    print("Hello World!", 0, 0);
+    print("SOup!", 0, 1);
 }
