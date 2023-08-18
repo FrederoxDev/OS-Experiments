@@ -1,7 +1,9 @@
 #include "../driver/screen.c"
 
-void main() {
+void _start() {
     clear_screen();
-    print("Hello World!", 0, 0);
-    print("SOup!", 0, 1);
+    print("Successfully loaded into Kernel!\n\n");
+    print("F\nSoup\n");
+    print("Hi");
+    print(" there!");
 }

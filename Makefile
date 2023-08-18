@@ -5,7 +5,7 @@ NASM=nasm
 BUILD=_build
 
 run: build
-	qemu-system-i386 -fda $(BUILD)/os-image
+	qemu-system-i386 -drive format=raw,file=$(BUILD)/os-image,if=floppy
 
 build: kernel boot_sect
 	cat $(BUILD)/boot_sect.bin $(BUILD)/kernel.bin > $(BUILD)/os-image
