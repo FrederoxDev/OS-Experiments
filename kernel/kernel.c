@@ -1,8 +1,8 @@
-#include "../driver/screen.c"
+#include "stdlib.c"
+#include "stdio.c"
 
 void _start() {
-    clear_screen();
-    print("Successfully loaded into Kernel!\n\n");
-    print("Hi");
-    print(" there!");
+    clrscr();
+
+    printf("Hello, %s %i 0x%x", "World!", 16, 0x15435355);
 }

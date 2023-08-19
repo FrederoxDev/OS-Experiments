@@ -1,3 +1,4 @@
+#pragma once
 #include <stdint.h>
 #include "../kernel/low_level.c"
 
@@ -10,57 +11,51 @@
 #define REG_SCREEN_CTRL 0x3D4
 #define REG_SCREEN_DATA 0x3D5
 
+// Globals
+int g_row = 0;
+int g_col = 0;
+
 /*
-Converts a position on screen to an absolute offset
+ * Converts a position on screen to an absolute offset
 */
 uint16_t get_screen_offset(int col, int row) 
 {
-    return (row * MAX_COLS + col) * 2;
+    return row * MAX_COLS + col;
 }
 
 /*
-Gets the row from an absolute offset
+ * Sets a character at an absolute position
 */
-uint16_t get_row(int offset) 
+void set_char_at_pos(char character, int col, int row, char attribute_byte) 
 {
-    return offset / MAX_COLS;
-}
+    unsigned char *video_mem = (unsigned char *)VIDEO_ADDRESS;
+    int offset = get_screen_offset(col, row) * 2;
 
-/**
- * Gets the column from an absolute offset
-*/
-uint16_t get_col(int offset)
-{
-    return offset % MAX_COLS;
+    video_mem[offset] = character;
+    video_mem[offset + 1] = attribute_byte;
 }
 
 /*
-Hides the cursor
+ * Entirely blanks the screen and resets the cursor position
 */
-void disable_cursor()
+void clear_screen() 
 {
-    outb(REG_SCREEN_CTRL, 0x0A);
-    outb(REG_SCREEN_DATA, 0x20);
+    for (int row = 0; row < MAX_ROWS; row++) {
+        for (int col = 0; col < MAX_COLS; col++) {
+            set_char_at_pos(' ', col, row, WHITE_ON_BLACK);
+        }
+    }
+
+    g_col = 0;
+    g_row = 0;
 }
 
 /*
-Enables the cursor, with the start and end scanlines set
+ * Moves the cursor visual
 */
-void enable_cursor(uint8_t cursor_start, uint8_t cursor_end) 
+void update_cursor_pos() 
 {
-    outb(REG_SCREEN_CTRL, 0x0A);
-    outb(REG_SCREEN_DATA, (inb(REG_SCREEN_DATA) & 0xC0) | cursor_start);
-
-    outb(REG_SCREEN_CTRL, 0x0B);
-    outb(REG_SCREEN_DATA, (inb(REG_SCREEN_DATA) & 0xE0) | cursor_end);
-}
-
-/*
-Sets the cursor to the specified position
-*/
-void set_cursor_pos(int col, int row) 
-{
-    uint16_t pos = get_screen_offset(col, row) / 2;
+    uint16_t pos = get_screen_offset(g_col, g_row);
 
     outb(REG_SCREEN_CTRL, 0x0F);
     outb(REG_SCREEN_DATA, (uint8_t)(pos & 0xFF));
@@ -68,73 +63,39 @@ void set_cursor_pos(int col, int row)
     outb(REG_SCREEN_DATA, (uint8_t)((pos >> 8) & 0xFF));
 }
 
-/*
-Gets the absolute position of the cursor
+/**
+ * Writes a single character
 */
-uint16_t get_cursor_position() 
+void write_char(char* character, char attribute_byte) 
 {
-    uint16_t pos = 0;
-    outb(REG_SCREEN_CTRL, 0x0F);
-    pos |= inb(REG_SCREEN_DATA);
-
-    outb(REG_SCREEN_CTRL, 0x0E);
-    pos |= ((uint16_t)inb(REG_SCREEN_DATA)) << 8;
-    
-    return pos;
-}
-
-/*
-Sets a character
-*/
-void set_char(char character, int col, int row, char attribute_byte) {
-    unsigned char *video_mem = (unsigned char *)VIDEO_ADDRESS;
-    int offset = get_screen_offset(col, row);
-
-    video_mem[offset] = character;
-    video_mem[offset + 1] = attribute_byte;
-}
-
-/*
-Entirely blanks the screen and resets the cursor position
-*/
-void clear_screen() {
-    for (int row = 0; row < MAX_ROWS; row++) {
-        for (int col = 0; col < MAX_COLS; col++) {
-            set_char(' ', col, row, WHITE_ON_BLACK);
-        }
+    if (*character == '\n') 
+    {
+        g_col = 0;
+        g_row++;
+        return;
     }
 
-    set_cursor_pos(0, 0);
-}
+    set_char_at_pos(*character, g_col++, g_row, attribute_byte);
 
-/*
-Prints text to terminal from the cursor position
-*/
-void print(char text[]) 
-{
-    uint16_t abs_pos = get_cursor_position();
-    uint16_t col = get_col(abs_pos);
-    uint16_t row = get_row(abs_pos);
-    char *c = text;
-
-    // Loop until null terminator
-    while (*c != '\0') {
-        // New lines
-        if (*c == '\n') {
-            col = 0;
-            row++;
-            c++;
-            continue;
-        }
-
-        set_char(*c, col++, row, WHITE_ON_BLACK);
-        if (col >= MAX_COLS) {
-            col = 0;
-            row++;
-        }
-
-        c++;
+    // Wrap at the end of the line
+    if (g_col >= MAX_COLS) {
+        g_col = 0;
+        g_row++;
     }
 
-    set_cursor_pos(col, row);
+    // Wrap at the bottom back to the top
+    if (g_row >= MAX_ROWS) {
+        g_row = 0;
+        g_col = 0;
+    }
+}
+
+/**
+ * Writes a null terminating string
+*/
+void print(char* buffer, char attribute_byte) {
+    while (*buffer != '\0') {
+        write_char(buffer, attribute_byte);
+        buffer++;
+    }
 }
