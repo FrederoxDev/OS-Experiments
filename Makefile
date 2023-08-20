@@ -35,10 +35,12 @@ kernel: $(ASM_OBJECTS) $(C_OBJECTS)
 
 # *.asm
 $(BUILD)/%.o: $(SRC)/%.asm
+	@mkdir -p $(@D)  # Create the directory if it doesn't exist
 	$(NASM) $< -f elf -o $@
 
 # *.c
 $(BUILD)/%.o: $(SRC)/%.c $(HEADERS)
+	@mkdir -p $(@D)  # Create the directory if it doesn't exist
 	$(GCC) $(CFLAGS) -c $< -o $@
 
 
@@ -52,4 +54,4 @@ boot_sect: $(wildcard boot/*.asm)
 # 	CLEAN
 #
 clean:
-	rm -rf $(BUILD)/*.o $(BUILD)/kernel.bin
+	find $(BUILD) -name "*" -exec rm -rf {} +
