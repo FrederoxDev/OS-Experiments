@@ -1,7 +1,4 @@
-#pragma once
-#include "../driver/screen.c"
-#include <stdarg.h>
-#include "./stdlib.c"
+#include "stdio.h"
 
 void printf(char* format, ...) 
 {

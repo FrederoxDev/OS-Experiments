@@ -1,3 +1,5 @@
+#include "low_level.h"
+
 unsigned char inb(unsigned short port) 
 {
     // "=a" ( result ) means : put AL register in variable RESULT when finished

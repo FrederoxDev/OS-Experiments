@@ -9,5 +9,13 @@
         "toolchain/": true,
         ".vscode/": true
     },
-    "C_Cpp.errorSquiggles": "disabled"
+    "C_Cpp.errorSquiggles": "disabled",
+    "files.associations": {
+        "idt.h": "c",
+        "binary.h": "c",
+        "screen.h": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c",
+        "low_level.h": "c"
+    }
 }

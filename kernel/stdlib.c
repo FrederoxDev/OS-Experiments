@@ -1,4 +1,4 @@
-#pragma once
+#include "stdlib.h"
 
 char* reverse(char* str, int length) {
     int start = 0;
