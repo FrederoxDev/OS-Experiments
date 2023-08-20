@@ -29,7 +29,7 @@ load_kernel:
     call print_string
 
     mov bx, KERNEL_OFFSET       
-    mov dh, 15                  
+    mov dh, 45                  
     mov dl, [ BOOT_DRIVE ]     
     call disk_load         
 
@@ -45,7 +45,7 @@ BEGIN_PM:
 
 ; Global variables
 BOOT_DRIVE db 0
-MSG_REAL_MODE db "Started in 16 - bit Real Mode", ENDL, 0
+MSG_REAL_MODE db "Started in 16 - bit Real Mode. If stuck on this screen perhaps the bootloader didnt read enough of the disk to get the whole OS?", ENDL, 0
 MSG_PROT_MODE db "Entered 32 - bit Protected Mode", 0
 MSG_LOAD_KERNEL db "Loading Kernel into memory.", ENDL, 0
 

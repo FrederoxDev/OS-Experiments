@@ -17,6 +17,7 @@
         "stdio.h": "c",
         "stdlib.h": "c",
         "low_level.h": "c",
-        "flag.h": "c"
+        "flag.h": "c",
+        "isr_gen.h": "c"
     }
 }

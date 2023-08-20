@@ -27,3 +27,10 @@ void outw(unsigned short port, unsigned short data)
 {
     __asm__("out %%ax, %%dx " : : "a" ( data ), "d" ( port ));
 }
+
+void i386_Panic() {
+    asm volatile (
+        "cli\n\t"
+        "hlt\n\t"
+    );
+}
