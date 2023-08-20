@@ -1,7 +1,4 @@
 #include "idt.h"
-#include <stdint.h>
-#include "../util/binary.h"
-#include "../stdio.h"
 
 typedef struct 
 {
@@ -45,9 +42,9 @@ void i386_IDT_DisableGate(int interrupt)
     FLAG_UNSET(g_IDT[interrupt].Flags, IDT_FLAG_PRESENT);
 }
 
-// void __attribute__((cdecl)) i386_IDT_Load(IDTDescriptor* idtDescriptor);
+void __attribute__((cdecl)) i386_IDT_Load(IDTDescriptor* idtDescriptor);
 
 void i386_IDT_Initialize()
 {
-    // i386_IDT_Load(&g_IDTDescriptor);
+    i386_IDT_Load(&g_IDTDescriptor);
 }

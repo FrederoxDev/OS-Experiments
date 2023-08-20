@@ -1,9 +1,10 @@
-#include "stdio.h"
+#include "std/stdio.h"
+#include "i386/idt.h"
 
 void _start() {
     clrscr();
-    printf("Attempting to initialise HAL!\n");
-    printf("F");
+    printf("Successfully bootloaded Kernel!\n");
 
-    printf("Hello, %s %i 0x%x", "World!", 16, 0x15435355);
+    i386_IDT_Initialize();
+    printf("    - Initialized IDT\n");
 }

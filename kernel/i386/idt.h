@@ -1,5 +1,7 @@
 #pragma once
 #include <stdint.h>
+#include "../util/flag.h"
+#include "../std/stdio.h"
 
 typedef enum 
 {

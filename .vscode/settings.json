@@ -16,6 +16,7 @@
         "screen.h": "c",
         "stdio.h": "c",
         "stdlib.h": "c",
-        "low_level.h": "c"
+        "low_level.h": "c",
+        "flag.h": "c"
     }
 }
